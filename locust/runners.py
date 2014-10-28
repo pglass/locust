@@ -57,6 +57,18 @@ class LocustRunner(object):
     def user_count(self):
         return len(self.locusts)
 
+    @property
+    def state(self):
+        return self._state
+
+    @state.setter
+    def state(self, new_state):
+        if not hasattr(self, '_state'):
+            self._state = None
+        if self._state != new_state:
+            events.state_changed.fire(previous=self._state, current=new_state)
+        self._state = new_state
+
     def weight_locusts(self, amount, stop_timeout = None):
         """
         Distributes the amount of locusts for each WebLocust-class according to it's weight
